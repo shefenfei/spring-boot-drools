@@ -1,0 +1,12 @@
+package rules;
+import com.fisher.drools.springbootdrools.fact.Person;
+dialect  "mvel"
+
+rule "hello"
+    no-loop true
+    when
+        $p: Person(age > 30)
+    then
+        $p.setName("老人");
+        update($p);
+end

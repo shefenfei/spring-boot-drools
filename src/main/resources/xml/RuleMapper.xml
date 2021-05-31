@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fisher.drools.springbootdrools.mapper.RuleMapper">
+
+    <resultMap id="baseResult" type="com.fisher.drools.springbootdrools.mapper.entity.Rule">
+        <id column="id" property="id"/>
+        <result column="rule_title" property="ruleName"/>
+        <result column="rule_body" property="ruleBody"/>
+        <result column="origin" property="origin"/>
+        <result column="target" property="target"/>
+        <result column="create_at" property="createAt"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="is_deleted" property="deleted"/>
+    </resultMap>
+
+    <resultMap id="RuleWithDetail" type="com.fisher.drools.springbootdrools.mapper.entity.RuleWithDetail">
+        <id column="id" property="id"/>
+        <result column="rule_title" property="ruleName"/>
+        <result column="rule_body" property="ruleBody"/>
+        <result column="origin" property="origin"/>
+        <result column="target" property="target"/>
+
+        <collection property="details" ofType="com.fisher.drools.springbootdrools.mapper.entity.RuleDetail" select="getRuleDetailById" column="id">
+            <id column="id" property="id"/>
+            <result column="rule_id" property="ruleId"/>
+            <result column="rule_detail" property="ruleDetail"/>
+            <result column="rule_type" property="ruleType"/>
+            <result column="time_condition" property="timeCondition"/>
+        </collection>
+     </resultMap>
+
+    <select id="getAllRules" resultMap="RuleWithDetail">
+        select * from rule r;
+    </select>
+
+    <select id="getRuleDetailById" resultType="com.fisher.drools.springbootdrools.mapper.entity.RuleDetail" parameterType="long">
+        select * from rule_detail rd where rd.rule_id = #{id};
+    </select>
+
+<!--
+    <resultMap type="Teacher" id="teacherMaps">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="class_name" property="className"/>
+        <collection property="students" ofType="Student" select="getStudents" column="id">
+        </collection>
+    </resultMap>
+    &lt;!&ndash; 查询所有的老师级各自的所有学生 &ndash;&gt;
+    <select id="getAllTeacher" parameterType="Teacher" resultMap="teacherMaps">
+    SELECT
+      t.id,
+      t.NAME,
+      t.class_name
+    FROM
+      teacher t
+  </select>
+    <select id="getStudents" parameterType="int" resultType="Student">
+    select
+      s.id,
+      s. NAME,
+      s.class_name as className
+    from student s
+    where teacher_id = #{id}
+  </select>
+    -->
+
+   <!-- <select id="getDetailById" resultType="com.fisher.drools.springbootdrools.mapper.entity.RuleDetail">
+        select * from rule_detail where rule_id = #{id};
+    </select>-->
+
+</mapper>
